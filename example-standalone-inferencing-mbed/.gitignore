@@ -1,0 +1,5 @@
+build/
+*.gcda
+utensor-model/
+edge-impulse-sdk
+deploy.zip
