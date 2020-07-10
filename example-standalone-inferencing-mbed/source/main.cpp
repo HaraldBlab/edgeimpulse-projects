@@ -13,6 +13,39 @@ int raw_feature_get_data(size_t offset, size_t length, float *out_ptr) {
     return 0;
 }
 
+void print_predictions(const ei_impulse_result_t result)
+{
+    printf("[");
+    for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
+        printf("%s: ", result.classification[ix].label);
+        printf("%.5f", result.classification[ix].value);
+#if EI_CLASSIFIER_HAS_ANOMALY == 1
+        printf(", ");
+#else
+        if (ix != EI_CLASSIFIER_LABEL_COUNT - 1) {
+            printf(", ");
+        }
+#endif
+    }
+#if EI_CLASSIFIER_HAS_ANOMALY == 1
+    printf("%.3f", result.anomaly);
+#endif
+    printf("]\n");
+}
+
+int get_best_classification(const ei_impulse_result_t &result)
+{
+    int bestIndex = -1;
+    float bestValue = 0.f;
+    const char *bestLabel = nullptr;
+    for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
+        if (result.classification[ix].value > bestValue)
+        {
+            bestIndex = ix;
+        }   
+    }
+    return bestIndex;
+}
 int main() {
     printf("Edge Impulse standalone inferencing (Mbed)\n");
 
@@ -27,7 +60,7 @@ int main() {
     // the features are stored into flash, and we don't want to load everything into RAM
     signal_t features_signal;
     features_signal.total_length = sizeof(features) / sizeof(features[0]);
-    features_signal.get_data = &raw_feature_get_data;
+    features_signal.get_data = raw_feature_get_data;
 
     // invoke the impulse
     EI_IMPULSE_ERROR res = run_classifier(&features_signal, &result, true);
@@ -39,19 +72,12 @@ int main() {
         result.timing.dsp, result.timing.classification, result.timing.anomaly);
 
     // print the predictions
-    printf("[");
-    for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
-        printf("%.5f", result.classification[ix].value);
-#if EI_CLASSIFIER_HAS_ANOMALY == 1
-        printf(", ");
-#else
-        if (ix != EI_CLASSIFIER_LABEL_COUNT - 1) {
-            printf(", ");
-        }
-#endif
-    }
-#if EI_CLASSIFIER_HAS_ANOMALY == 1
-    printf("%.3f", result.anomaly);
-#endif
-    printf("]\n");
+    print_predictions(result);
+
+    // output the best fit
+    int bestIndex = get_best_classification(result);
+    const char *bestLabel = bestIndex == -1 ? nullptr : result.classification[bestIndex].label;
+
+    printf("detected: '%s'", bestLabel == nullptr ? "undefined" : bestLabel);
+    printf("\ndone.\n");
 }
