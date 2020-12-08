@@ -1,3 +1,15 @@
-# Edge Impulse Example: stand-alone inferencing (Mbed OS)
+# Edge Impulse Example: Gestures
+This runs a trained model of the gestures sample and performs verifications.
 
-This runs an exported impulse on any Mbed-enabled development board. See the documentation at [Running your impulse locally (Mbed)](https://docs.edgeimpulse.com/docs/running-your-impulse-mbed).
+## The story
+I want ti get my hands on machine learning at the edge.
+This is the first example of edge immpulse to get in touch with their great technology.
+
+## Gestures
+** updown
+** wave
+** snake
+** idle
+
+## Platform
+Developed in mbed studio for the stm32l4 iot board.
