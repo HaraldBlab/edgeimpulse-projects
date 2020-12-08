@@ -1,2 +1,3 @@
-# mbed-os-example
-mbed os related samples for stm32 boards
+# edge impulse related prjects
+## ei-gestures Gesture sample
+mbed os sample for stm32L4 IOT board
