@@ -8,3 +8,6 @@ Arduino IDE sample for the Nano 33 BLE sense board.
 ## ei-rooms
 A trained model to detect humidity and temperature in 3 rooms.
 Arduino IDE sample for the Nano 33 BLE sense board.
+## ei-fruits
+A trained model to detect 4 different fruits.
+Arduino IDE 2.0 sample for the ESP32-CAM board.
