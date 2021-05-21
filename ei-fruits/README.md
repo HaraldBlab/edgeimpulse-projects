@@ -17,6 +17,9 @@ Images taken with the mobile phone and rescaled on a laptop before uploading.
 ### banana
 ### orange
 ### pear
+### kiwi
+### strawberry
+### nectarine
 
 ## Platform
 Arduino IDE 2.00(beta) sample for the ESP32 Wrover board with Partition scheme Huge App.
