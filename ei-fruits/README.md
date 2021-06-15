@@ -20,9 +20,18 @@ Images taken with the mobile phone and rescaled on a laptop before uploading.
 ### kiwi
 ### strawberry
 ### nectarine
+### apricot
+### grape
+
+## Detection
+### floating point model
+Detects with 89%
+There are errors detecting nectarine and apricot.
+### optimited EON model model
+Detects poorly with 32%. The confusion matrix is almost red. :(
 
 ## Platform
-Arduino IDE 2.00(beta) sample for the ESP32 Wrover board with Partition scheme Huge App.
+Arduino IDE 1.8.15 sample for the AI Thinker ESP32CAM board with Partition scheme Huge App.
 
 Based on work provided by EdgeImpulse. 
 https://forum.edgeimpulse.com/t/esp32-cam-support/797
