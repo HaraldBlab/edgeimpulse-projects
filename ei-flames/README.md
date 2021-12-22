@@ -14,6 +14,7 @@ In this case I overwrite the frequency using the '--frequency 6' parameter.
 ```
 edge-impulse-data-forwarder --frequency 6
 ```
+	
 
 Data is collected 80 cm in front of the oven at a height of 60 cm.
 
@@ -32,11 +33,8 @@ Wood is burning. A lot of flames are visible in the oven.
 ### glowing
 Wood is glowing. No more flames in the oven.
 
-### cooling
+### loading
 If the glowing decreases, I have to load the oven.
-
-### idle
-This is the reference state if the oven is not burning.
 
 ## Platform
 Data collection in MicroPython and Arduino. Arduino libray used to run model with same hardware.
@@ -51,3 +49,7 @@ The Arduino source code of the data collector.
 
 #### MicroPython
 The MicroPhyton source code of the data collector.
+
+
+### ei-flames-arduino
+Arduino code to run the data collector and data analyzer implementing the ML inferencing.

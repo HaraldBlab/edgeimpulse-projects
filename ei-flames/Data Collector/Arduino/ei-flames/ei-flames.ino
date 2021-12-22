@@ -8,7 +8,7 @@
 #include "Flamesensor.h"
 #include "Dht11Sensor.h"
 
-FlameSensor flameSensor(A0, D2);
+FlameSensor flameSensor(D2, A0);
 Dht11Sensor dhtSensor(D5);
 
 void setup() {
@@ -18,7 +18,7 @@ void setup() {
 }
 
 void loop() {
-  int flames = flameSensor.value();
+  float flames = (float) flameSensor.value();
   float temperature = dhtSensor.temperature();
   float air = dhtSensor.humidity();
   
