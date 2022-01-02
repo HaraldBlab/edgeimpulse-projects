@@ -50,6 +50,8 @@ The Arduino source code of the data collector.
 #### MicroPython
 The MicroPhyton source code of the data collector.
 
+### ei-flames-telegram
+Arduino code to run the data telegram BOT to report states of the oven sensor.
 
 ### ei-flames-arduino
 Arduino code to run the data collector and data analyzer implementing the ML inferencing.
