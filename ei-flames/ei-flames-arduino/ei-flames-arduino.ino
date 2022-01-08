@@ -34,6 +34,14 @@
 
 DataCollector collector;
 
+#include "DataTelegramBOT.h"
+DataTelegramBOT telegramBOT;
+
+/* data analyzer */
+unsigned long requestLoading = 60000;  /* time span for sending "put some wood in the oven"  */
+unsigned long lastTimeLoadingSent;
+int lastIndex = -1; /* previous analyzing state */
+
 static float features[] = {
     // copy raw features here (for example from the 'Live classification' page)
     // see https://docs.edgeimpulse.com/docs/running-your-impulse-arduino
@@ -67,6 +75,8 @@ void setup()
     Serial.println("Edge Impulse Inferencing Demo");
 
     collector.setup();
+
+    telegramBOT.setup();
 }
 
 /**
@@ -134,6 +144,55 @@ void loop()
     ei_printf("    anomaly score: %.3f\n", result.anomaly);
 #endif
 
+    /* update the state visible */
+    float bestValue = 0.0;
+    int bestIndex = -1;
+    for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
+      if (result.classification[ix].value > bestValue) {
+        bestIndex = ix;
+        bestValue = result.classification[bestIndex].value;
+      }
+    }
+    if (bestIndex != -1) {
+      String state(result.classification[bestIndex].label);
+      telegramBOT.state = state;
+    }
+    /* FIX:
+     * model is not accurate on getting the loading state
+     * so I add a simple treshhold handling here
+     * Btw this means that I don't need ML here hmmm
+     */
+    #define MODEL_LOADING 3
+    const float flameValueLoading = 678.0;
+    float flameValue = 0.0;
+    for (int i = 0; i < EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE; i+=3)
+      flameValue += features[i];
+    flameValue /= 3.0;
+    if (flameValue > flameValueLoading) {
+      bestIndex = MODEL_LOADING;
+      
+      String state(result.classification[bestIndex].label);
+      telegramBOT.state = state;
+    }
+
+    /* send alert message if "loading" for too long 
+     * do it after the loop to not run into race condition
+     */
+    if (bestIndex == MODEL_LOADING) {
+        if (lastIndex == MODEL_LOADING) {
+          if (millis() > lastTimeLoadingSent + requestLoading) {
+            ei_printf("%s\n", "Put more wood in the oven");
+            telegramBOT.sendMessage("Put more wood in the oven");
+            lastTimeLoadingSent = millis();
+          }
+        }
+    }
+    lastIndex = bestIndex;
+
+    /* communicate with the telegramBOT */
+    telegramBOT.loop();
+
+    /* wait for next event to detect */
     delay(1000);
 }
 
