@@ -14,9 +14,8 @@ In this case I overwrite the frequency using the '--frequency 6' parameter.
 ```
 edge-impulse-data-forwarder --frequency 6
 ```
-	
 
-Data is collected 80 cm in front of the oven at a height of 60 cm.
+Data is collected 190 cm in front of the oven at a height of 70 cm.
 
 ## Labels
 The dataset labels defines the state of the oven.
@@ -36,10 +35,17 @@ Wood is glowing. No more flames in the oven.
 ### loading
 If the glowing decreases, I have to load the oven.
 
+## Results
+Detecting the loading state is handled by checking the treshhold of the flames value over some time.
+The ML model is not that exact enough to deliver the information every time.
+
+Sending the telegram sometimes fails due to erros in the async library of the ESP.
+Behaviour is well known but off topic here.
+
 ## Platform
 Data collection in MicroPython and Arduino. Arduino libray used to run model with same hardware.
 
-## Folders
+## Folders	
 
 ### Data Collector
 Source of the data collectors used.
@@ -54,4 +60,7 @@ The MicroPhyton source code of the data collector.
 Arduino code to run the data telegram BOT to report states of the oven sensor.
 
 ### ei-flames-arduino
-Arduino code to run the data collector and data analyzer implementing the ML inferencing.
+Arduino code to run the data collector the data analyzer implementing the ML inferencing and the data telegram BOT.
+
+### OvenSensor
+OpenSCAD model of the sensor enclosure.
